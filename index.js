@@ -4,7 +4,7 @@ const exphbs = require('express-handlebars')
 const app = express()
 const cors = require('cors')
 const axios = require('axios')
-// require('dotenv').config({ path: path.join(__dirname, 'config', '.env') });
+require('dotenv').config({ path: path.join(__dirname, 'config', '.env') });
 
 
 app.use(cors())
@@ -173,4 +173,4 @@ app.get('/source/:slug/:ep_id', async (req,res)=>{
 //     res.send(data)
 // })
 
-app.listen(8080, ()=>console.log('Server running...'))
+app.listen(process.env.PORT, ()=>console.log('Server running...'))
