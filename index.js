@@ -14,7 +14,7 @@ app.set('view engine', '.hbs');
 
 app.get('/', async (req, res) => {
     try {
-        const response = await axios.get(`${process.env.BASE_URL}/trending/?timeline=all`, {
+        const response = await axios.get(`${process.env.BASE_URL}/trending/?timeline=week`, {
             headers: {
                 'Content-Type': 'application/json',
             }
