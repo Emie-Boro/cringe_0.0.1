@@ -74,66 +74,6 @@ app.get('/', async (req, res) => {
 });
 
 
-// Anime Details
-// /about/slug
-app.get('/about/:slug', async(req,res)=>{
-    try {
-        const response = await axios.get(`${process.env.BASE_URL}/details/category/${req.params.slug}`)
-        const data = response.data
-        // res.status(200).json(data)
-        res.render('about', {
-            layout: 'demo',
-            data
-        })
-    } catch (error) {
-        res.json({error: error})
-    }
-})
-
-
-// Latest Subbed
-// /latestsubbed
-app.get('/latestsubbed', async(req,res) =>{
-    const response = await axios.get(`${process.env.BASE_URL}/home/`)
-    const data = response.data
-    res.status(200).send(data)
-})
-
-// Trending Anime
-// /trending/month
-// /trending/week
-// /trending/all
-app.get('/trending/:timeline', async(req,res)=>{
-    try {
-        const response = await axios.get(`${process.env.BASE_URL}/trending/?timeline=${req.params.timeline}`)
-        const data = response.data
-
-        data.forEach(async (item) => {
-            item.slug = item.url.replace('/category/','')
-            item.url = ''
-            const img = await axios.get(`${process.env.BASE_URL}/details/category/${item.slug}`)
-            item.img = img.data.image;
-        });
-
-        await Promise.all(
-            data.map(async (item) => {
-                // Getting the number of Seaons
-                const seasonsData = await axios.get(`${process.env.BASE_URL}/seasons/${item.slug}`);
-                item.id = seasonsData.data.seasons[0][1];
-                return item
-            })
-
-        );
-        // res.status(200).json(data)
-        res.render('trending', {
-            layout: 'demeo',
-            data
-        })
-    } catch (error) {
-        res.status(400).json({message: error})
-    }
-})
-
 // Getting Episodes of a Season
 // /slug/id
 app.get('/:slug/:id', async (req,res)=>{
@@ -165,12 +105,5 @@ app.get('/source/:slug/:ep_id', async (req,res)=>{
         res.status(400).json({error: error})
     }
 })
-
-// app.get('/', async(req,res)=>{
-//     const source = await axios.get(`${process.env.BASE_URL}/source/`)
-//     const data = source.data.map(([id, name])=> ({id, name}))
-    
-//     res.send(data)
-// })
 
 app.listen(process.env.PORT, ()=>console.log('Server running...'))
